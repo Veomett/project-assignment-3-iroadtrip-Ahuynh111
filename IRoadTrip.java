@@ -1,9 +1,12 @@
 import java.util.List;
+import java.io.*;
+import java.util.Scanner;
 
 public class IRoadTrip {
 
 
-    public IRoadTrip (String [] args) {
+    //CONSTRUCTOR//
+    public IRoadTrip (String [] args) { 
         // Replace with your code
     }
 
@@ -28,6 +31,20 @@ public class IRoadTrip {
 
     public static void main(String[] args) {
         IRoadTrip a3 = new IRoadTrip(args);
+
+        //READ IN FILES//
+        try{
+            File bordersFile = new File("borders.txt");
+            Scanner borderScanner = new Scanner(bordersFile);
+
+            System.out.println(borderScanner.nextLine());
+            System.out.println(borderScanner.nextLine());
+        }catch (FileNotFoundException FNFE){
+            System.out.println("ERROR: 'borders.txt' File Not Found");
+        }
+
+
+
 
         a3.acceptUserInput();
     }
