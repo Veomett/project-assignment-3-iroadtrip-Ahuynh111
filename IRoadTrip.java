@@ -47,7 +47,7 @@ public class IRoadTrip {
             File stateFile = new File(args[2]);
             Scanner stateScanner = new Scanner(stateFile);
 
-            findNeighborsList(borderScanner, createCountryList(stateScanner));
+            findNeighborsList(bordersFile, createCountryList(stateScanner));
 
         }catch (FileNotFoundException FNFE){
             System.out.println("ERROR: Please enter the following required files - 'borders.txt' 'capdist.csv' 'state_name.tsv'");
@@ -246,26 +246,30 @@ public class IRoadTrip {
 
     }
 
-    public void findNeighborsList(Scanner borders, Country headCountry){
+    public void findNeighborsList(File borders, Country headCountry){
         Country pointerCountry = headCountry;
 
         while(pointerCountry.next != null){
-            while(borders.hasNextLine()){
-                Scanner borderingNeighbors = borders;
-                String neighbors = borders.nextLine();
-                String[] splitNeighbors = neighbors.split("[=;]");
-                //retrive all neighbors
-                if(splitNeighbors[0].trim().equals(pointerCountry.Name)){
-                    System.out.println("TARGET: " + pointerCountry.Name);
-                    System.out.println("FOUND IN LIST: " + splitNeighbors[0].trim());
-                    for(int i = 0; i < splitNeighbors.length; i++){
-                        System.out.println(splitNeighbors[i].trim());
+            try{
+                Scanner borderingNeighbors = new Scanner(borders);
+                while(borderingNeighbors.hasNextLine()){
+                    String neighbors = borderingNeighbors.nextLine();
+                    String[] splitNeighbors = neighbors.split("[=;]");
+                    //retrive all neighbors
+                    if(splitNeighbors[0].trim().equals(pointerCountry.Name)){
+                        for(int i = 1; i < splitNeighbors.length; i++){
+                            System.out.print(splitNeighbors[i].trim());
+                            System.out.print(" ");
+                        }
+                        System.out.println("");  
                     }
                 }
+                pointerCountry = pointerCountry.next;
+            }catch (FileNotFoundException FNFE){
+                System.out.println("ERROR: Please enter the following required files - 'borders.txt' 'capdist.csv' 'state_name.tsv'");
+                System.exit(0);
             }
-            pointerCountry = pointerCountry.next;
         }
-
     }
 
     public int getDistance (String country1, String country2) {
