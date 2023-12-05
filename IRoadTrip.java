@@ -11,14 +11,20 @@ class Country{
     int Number;
 
     //Linked list of Neighbors (add into hashmap later)
-    Country firstNeighbor;
-    Country lastNeighbor;
-    Country nextNeghbor; 
+    Country headNeighbor;
+    Country tailNeighbor;
+    Country nextNeghbor;
+    Country next; // general next country in mass list of countries
 
-    Country(String n, String c, int num){
+    //COUNTRY CONSTRUCTOR//
+    Country(String num, String c, String n){
         Name = n;
         Code = c;
-        Number = num;
+        Number = Integer.parseInt(num);
+    }
+
+    //DEFAULS COUNTRY CONSTRUCTOR//
+    Country(){
     }
 }
 
@@ -50,10 +56,51 @@ public class IRoadTrip {
     }
 
     //CREATE GRAPH OF COUNTRIES//
-    public void createMap (Scanner borders, Scanner distance, Scanner states){
-        System.out.println(borders.nextLine());
-        System.out.println(distance.nextLine());
-        System.out.println(states.nextLine());
+    public Country createCountryList (Scanner states){
+        Country headCountry = new Country();
+        Country pointerCountry  = new Country();
+        int totalCountries = 0;
+
+        //filter out codes with incorrect dates, add country to major linked list
+        while(states.hasNextLine()){
+            if(totalCountries == 0){
+                String line = states.nextLine();
+                String[] splitLine = line.split("\t");
+                if (splitLine[4].equals("2020-12-31")){
+                    Country c = new Country(splitLine[0], splitLine[1], splitLine[2]);
+                    headCountry = c;
+                    pointerCountry = c;
+                    totalCountries++;
+                }
+            }else{
+                String line = states.nextLine();
+                String[] splitLine = line.split("\t");
+                if (splitLine[4].equals("2020-12-31")){
+                    Country c = new Country(splitLine[0], splitLine[1], splitLine[2]);
+                    pointerCountry.next = c;
+                    pointerCountry = c;
+                    totalCountries++;
+                }
+            }
+        }
+
+        /* print list of countries
+        pointerCountry = headCountry;
+        while(pointerCountry.next != null){
+            System.out.println(pointerCountry.Name);
+            pointerCountry = pointerCountry.next;
+        }*/
+
+        return headCountry;
+    }
+
+    public void findNeighbors(Scanner borders, Country headCountry){
+        String neighbors = borders.nextLine();
+        String[] splitNeighbors = neighbors.split("[=;]");
+        
+        
+
+
     }
 
     public int getDistance (String country1, String country2) {
