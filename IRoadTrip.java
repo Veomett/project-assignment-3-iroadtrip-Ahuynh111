@@ -41,21 +41,19 @@ public class IRoadTrip {
             File stateFile = new File(args[2]);
             Scanner stateScanner = new Scanner(stateFile);
 
-            System.out.println(borderScanner.nextLine());
+            createMap(borderScanner, capDistScanner, stateScanner);
+
         }catch (FileNotFoundException FNFE){
-            System.out.println("ERROR: Files Not Found");
+            System.out.println("ERROR: Please enter the following required files - 'borders.txt' 'capdist.csv' 'state_name.tsv'");
             System.exit(0);
         }
-
-
-
-        System.out.println(borderScanner.nextLine());
     }
 
     //CREATE GRAPH OF COUNTRIES//
-    public void createMap (File borders, File distance, File names){
-        System.out.println(borderScanner.nextLine());
-
+    public void createMap (Scanner borders, Scanner distance, Scanner states){
+        System.out.println(borders.nextLine());
+        System.out.println(distance.nextLine());
+        System.out.println(states.nextLine());
     }
 
     public int getDistance (String country1, String country2) {
