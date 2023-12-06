@@ -241,12 +241,12 @@ public class IRoadTrip {
             }
         }
 
-        //print list of countries
+        /*print list of countries
         pointerCountry = headCountry;
         while(pointerCountry.next != null){
             System.out.println(pointerCountry.Name);
             pointerCountry = pointerCountry.next;
-        }
+        }*/
 
         return headCountry;
 
@@ -273,6 +273,7 @@ public class IRoadTrip {
                 System.out.println("ERROR: Please enter the following required files - 'borders.txt' 'capdist.csv' 'state_name.tsv'");
                 System.exit(0);
             }
+
         }
     }
 
@@ -326,7 +327,6 @@ public class IRoadTrip {
         boolean foundNumbers = false;
 
         //Set individual hashmaps
-        System.out.println("----- Country Name: "+ country.Name );
         if(neighbors.length >= 2){
             String[] split1 = neighbors[1].split(";");
             for(int i = 0; i < split1.length; i++){
@@ -344,8 +344,6 @@ public class IRoadTrip {
                         Scanner scan = new Scanner(distances);
                         String distanceText = "";
                         int distance = 0;
-                        System.out.println(neighborCountry.Name);
-                        System.out.println(c);
                         while(scan.hasNextLine()){
                             distanceText = scan.nextLine();
                             String[] splitDistanceText = distanceText.split(",");
@@ -362,11 +360,10 @@ public class IRoadTrip {
                     }
                 }
 
-            }
-        //System.out.println(listOfNeighbors);
-            
+            }            
         }
         return listOfNeighbors;
+
 
     }
 
