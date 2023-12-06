@@ -75,7 +75,7 @@ public class IRoadTrip {
                         pointerCountry = c;
                         totalCountries++;
                     }else{
-                        Country c = new Country(splitLine[0], splitLine[1], splitLine[2]);
+                        Country c = new Country(splitLine[0], splitLine[1], splitLine[2].trim());
                         headCountry = c;
                         pointerCountry = c;
                         totalCountries++;                        
@@ -226,7 +226,7 @@ public class IRoadTrip {
                         pointerCountry = c;
                         totalCountries++;
                     }else{
-                        Country c = new Country(splitLine[0], splitLine[1], splitLine[2]);
+                        Country c = new Country(splitLine[0], splitLine[1], splitLine[2].trim());
                         pointerCountry.next = c;
                         pointerCountry = c;
                         totalCountries++;
@@ -249,6 +249,7 @@ public class IRoadTrip {
     //FIND ALL NEIGHBORS AND DISTANCES//
     public void findNeighborsList(File borders, Country headCountry){
         Country pointerCountry = headCountry;
+        HashMap<Country, HashMap> mapOfNeighbors = new HashMap<Country, HashMap>();
 
         while(pointerCountry.next != null){
             try{
@@ -258,7 +259,7 @@ public class IRoadTrip {
                     String[] splitNeighbors = neighbors.split("= ");
                     //retrive all neighbors
                     if(splitNeighbors[0].trim().equals(pointerCountry.Name)){
-                            System.out.println(setNeighborsList(splitNeighbors, headCountry)); //separate method to add neighbors 
+                            mapOfNeighbors.put(pointerCountry, setNeighborsList(splitNeighbors, headCountry)); //separate method to add neighbors 
                     }
                 }
                 pointerCountry = pointerCountry.next;
@@ -271,8 +272,23 @@ public class IRoadTrip {
 
     public Country findCountry(Country head, String target){
         Country pointerCountry = head;
+        String targetName = target;
+        //Different name cases
+        if(targetName.equals("US") || targetName.equals("USA") || targetName.equals("United States of America")){
+            targetName = "United States";
+        }else if(targetName.equals("Denmark (Greenland)") || targetName.equals("Greenland")){
+            targetName = "Denmark";
+        }else if(targetName.equals("UK")){
+            targetName = "United Kingdom";
+        }else if(targetName.equals("North Korea")){
+            targetName = "Korea, North";
+        }else if(targetName.equals("South Korea")){
+            targetName = "Korea, South";
+        }
+
+        //find country
         while(pointerCountry!= null){
-            if(pointerCountry.Name.equals(target.trim())){
+            if(pointerCountry.Name.equals(targetName.trim())){
                 break;
             }
             pointerCountry = pointerCountry.next;
@@ -285,7 +301,7 @@ public class IRoadTrip {
             return false;
         }
         try{
-            int number = Integer.parseInt(num);
+            double number = Double.parseDouble(num);
         }catch (NumberFormatException exception){
             return false;
         }
@@ -295,7 +311,7 @@ public class IRoadTrip {
 
 
     public HashMap setNeighborsList(String[] neighbors, Country headCountry){
-        HashMap<Country, String> listOfNeighbors = new HashMap<Country, String>();
+        HashMap<Country, Double> listOfNeighbors = new HashMap<Country, Double>();
         Country Neighbor;
         boolean foundLetters = true;
         boolean foundNumbers = false;
@@ -315,12 +331,13 @@ public class IRoadTrip {
 
                 //Parsing out neighbor distance
                 int index2 = index1;
-                while(isNum(split2[index1]) == true || split2[index1].equals(",")){
+                while(isNum(split2[index1]) == true || split2[index1].equals(",") || split2[index1].equals(".")){
                     index1++;
                 }
-                String distance = split1[i].substring(index2, index1+1).trim();
-                System.out.println(country);
-                System.out.println(distance);
+                double distance = Double.parseDouble(split1[i].substring(index2, index1+1).trim().replaceAll(",", ""));
+
+                //hashmap
+                listOfNeighbors.put(findCountry(headCountry, country), distance);
 
             }
             
