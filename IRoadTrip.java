@@ -23,7 +23,7 @@ class Country{
         Number = Integer.parseInt(num);
     }
 
-    //DEFAULS COUNTRY CONSTRUCTOR//
+    //DEFAULT COUNTRY CONSTRUCTOR//
     Country(){
     }
 }
@@ -246,6 +246,7 @@ public class IRoadTrip {
 
     }
 
+    //FIND ALL NEIGHBORS AND DISTANCES//
     public void findNeighborsList(File borders, Country headCountry){
         Country pointerCountry = headCountry;
 
@@ -254,14 +255,10 @@ public class IRoadTrip {
                 Scanner borderingNeighbors = new Scanner(borders);
                 while(borderingNeighbors.hasNextLine()){
                     String neighbors = borderingNeighbors.nextLine();
-                    String[] splitNeighbors = neighbors.split("[=;]");
+                    String[] splitNeighbors = neighbors.split("= ");
                     //retrive all neighbors
                     if(splitNeighbors[0].trim().equals(pointerCountry.Name)){
-                        for(int i = 1; i < splitNeighbors.length; i++){
-                            System.out.print(splitNeighbors[i].trim());
-                            System.out.print(" ");
-                        }
-                        System.out.println("");  
+                            System.out.println(setNeighborsList(splitNeighbors, headCountry)); //separate method to add neighbors 
                     }
                 }
                 pointerCountry = pointerCountry.next;
@@ -270,6 +267,66 @@ public class IRoadTrip {
                 System.exit(0);
             }
         }
+    }
+
+    public Country findCountry(Country head, String target){
+        Country pointerCountry = head;
+        while(pointerCountry!= null){
+            if(pointerCountry.Name.equals(target.trim())){
+                break;
+            }
+            pointerCountry = pointerCountry.next;
+        }
+        return pointerCountry;
+    }
+
+    public boolean isNum(String num){
+        if(num == null){
+            return false;
+        }
+        try{
+            int number = Integer.parseInt(num);
+        }catch (NumberFormatException exception){
+            return false;
+        }
+        return true;
+    }
+
+
+
+    public HashMap setNeighborsList(String[] neighbors, Country headCountry){
+        HashMap<Country, String> listOfNeighbors = new HashMap<Country, String>();
+        Country Neighbor;
+        boolean foundLetters = true;
+        boolean foundNumbers = false;
+        System.out.println("----------Country Name: " + neighbors[0]+ "-----------");
+
+        //Set individual hashmaps
+        if(neighbors.length >= 2){
+            String[] split1 = neighbors[1].split(";");
+            for(int i = 0; i < split1.length; i++){
+                int index1 = 0;
+                String[] split2 = split1[i].split("");
+                //Parsing out neighbor name
+                while(isNum(split2[index1]) == false){
+                    index1++;
+                }
+                String country = split1[i].substring(0,index1).trim();
+
+                //Parsing out neighbor distance
+                int index2 = index1;
+                while(isNum(split2[index1]) == true || split2[index1].equals(",")){
+                    index1++;
+                }
+                String distance = split1[i].substring(index2, index1+1).trim();
+                System.out.println(country);
+                System.out.println(distance);
+
+            }
+            
+        }
+        return listOfNeighbors;
+
     }
 
     public int getDistance (String country1, String country2) {
