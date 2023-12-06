@@ -2,6 +2,9 @@ import java.util.List;
 import java.io.*;
 import java.util.Scanner;
 import java.util.HashMap;
+import java.util.Queue;
+import java.util.LinkedList;
+import java.util.ArrayList;
 
 
 class Country{
@@ -9,12 +12,12 @@ class Country{
     String Name;
     String Code; 
     int Number;
+    int distanceFrom;
+    int heapIndex;
 
     //Linked list of Neighbors (add into hashmap later)
-    Country headNeighbor;
-    Country tailNeighbor;
-    Country nextNeghbor;
     Country next; // general next country in mass list of countries
+
 
     //COUNTRY CONSTRUCTOR//
     Country(String num, String c, String n){
@@ -30,6 +33,7 @@ class Country{
 
 public class IRoadTrip {
     Country headCountry;
+    HashMap<Country, HashMap> mapOfCountries = new HashMap<Country, HashMap>();
 
 
     //CONSTRUCTOR//
@@ -232,7 +236,6 @@ public class IRoadTrip {
                         pointerCountry.next = c;
                         pointerCountry = c;
                         totalCountries++;
-                    }
                     }else{
                         Country c = new Country(splitLine[0], splitLine[1], splitLine[2].trim());
                         pointerCountry.next = c;
@@ -257,7 +260,6 @@ public class IRoadTrip {
     //FIND ALL NEIGHBORS AND DISTANCES//
     public void findNeighborsList(File borders, File distances, Country headCountry){
         Country pointerCountry = headCountry;
-        HashMap<Country, HashMap> mapOfNeighbors = new HashMap<Country, HashMap>();
 
         while(pointerCountry.next != null){
             try{
@@ -267,7 +269,7 @@ public class IRoadTrip {
                     String[] splitNeighbors = neighbors.split("= ");
                     //retrive all neighbors
                     if(splitNeighbors[0].trim().equalsIgnoreCase(pointerCountry.Name)){
-                            mapOfNeighbors.put(pointerCountry, setNeighborsList(splitNeighbors, distances, headCountry)); //separate method to add neighbors                     
+                            mapOfCountries.put(pointerCountry, setNeighborsList(splitNeighbors, distances, headCountry)); //separate method to add neighbors                     
                     }
                 }
                 pointerCountry = pointerCountry.next;
@@ -371,24 +373,48 @@ public class IRoadTrip {
 
     //GET DISTANCE BETWEEN TWO COUNTRIES//
     public int getDistance (String country1, String country2) {
-        // Replace with your code
+        Country firstCountry = findCountry(headCountry, country1);
+        Country secondCountry = findCountry(headCountry, country2);
+        List<HashMap> neighbors;
+        if(firstCountry.Name == null){
+            return -1;
+        }else if(secondCountry.Name == null){
+            return -1;
+        }else{
+            System.out.println(mapOfCountries.get(firstCountry));
+        }
         return -1;
     }
 
+    //FIND RIGHTCHILD IN MIN HEAP//
+    public int rightChild(int parentIndex){
+        return(parentIndex*2+1);
+    }
+
+    //FIND LEFTCHILD IN MIN HEAP//
+    public int leftChild(int parentIndex){
+        return(parentIndex*2);
+    }
+    
+    //FIND PARENT IN MIN HEAP//
+    public int parent(int childIndex){
+        return(childIndex/2);
+    }
+
+
+    //HEAPIFY UP METHOD//
+    public void heapify(Country[] unvisited){
+
+    }
+
+
+
     //FIND SHORTEST PATH BETWEEN TWO COUNTRIES --> Dijkstras//
     public List<String> findPath (String country1, String country2) {
-        //find country associated with inputs
-        Country firstCountry = findCountry(headCountry, country1);
-        Country secondCountry = findCountry(headCountry, country2);
-
-        //
-
 
         return null;
     }
 
-    //HEAPIFY UP METHOD//
-    public 
 
     //PROMPT USER TO ENTER IN VALID COUNTRIES//
     public void acceptUserInput() {
@@ -424,7 +450,7 @@ public class IRoadTrip {
 
         //begin finding shortest path between countries
         if(valid1 == true && valid2 == true){
-            findPath(firstCountry, secondCountry);
+            getDistance(firstCountry, secondCountry);
         }
 
     }
@@ -469,15 +495,6 @@ public class IRoadTrip {
     public static void main(String[] args) {
         IRoadTrip a3 = new IRoadTrip(args);
     
-
-
-
-
-
-
-
-
-
         a3.acceptUserInput();
     }
 
