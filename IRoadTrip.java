@@ -29,6 +29,7 @@ class Country{
 }
 
 public class IRoadTrip {
+    Country headCountry;
 
 
     //CONSTRUCTOR//
@@ -59,7 +60,7 @@ public class IRoadTrip {
 
     //CREATE LIST OF COUNTRIES//
     public Country createCountryList (Scanner states){
-        Country headCountry = new Country();
+        headCountry = new Country();
         Country pointerCountry  = new Country();
         int totalCountries = 0;
 
@@ -315,7 +316,6 @@ public class IRoadTrip {
         Country Neighbor;
         boolean foundLetters = true;
         boolean foundNumbers = false;
-        System.out.println("----------Country Name: " + neighbors[0]+ "-----------");
 
         //Set individual hashmaps
         if(neighbors.length >= 2){
@@ -359,9 +359,75 @@ public class IRoadTrip {
 
 
     public void acceptUserInput() {
-        // Replace with your code
-        System.out.println("IRoadTrip - skeleton");
+        Scanner scan = new Scanner(System.in);
+        boolean valid1 = false;
+        boolean valid2 = false;
+        String firstCountry = " ";
+        String secondCountry = " ";
+        //prompt user for first country
+        while(valid1 == false){
+            System.out.println("Enter the name of the first country (type EXIT to quit): ");
+            firstCountry = scan.nextLine();
+            if(validateInput(headCountry, firstCountry)== true){
+                valid1 = true;
+            }else if(firstCountry.equalsIgnoreCase("EXIT")== true){
+                System.exit(0);
+            }else{
+                System.out.println("Invalid country name, Please enter a valid country name.");
+            }
+        }
+        //prompt user for second country
+        while(valid2 == false){
+            System.out.println("Enter the name of the second country (type EXIT to quit): ");
+            secondCountry = scan.nextLine();
+            if(validateInput(headCountry, secondCountry) == true){
+                valid2 = true;
+            }else if(secondCountry.equalsIgnoreCase("EXIT")){
+                System.exit(0);
+            }else{
+                System.out.println("Invalid country name, Please enter a valid country name.");
+            }
+        }
+
+        //begin finding shortest path between countries
+        if(valid1 == true && valid2 == true){
+            System.out.println("YOUR CHOICES: ");
+            System.out.println("First Country: "+ firstCountry);
+            System.out.println("Second Country: "+ secondCountry);
+        }
+
     }
+
+    public boolean validateInput(Country headCountry, String targetCountry){
+        Country pointerCountry = headCountry;
+        String targetName = targetCountry;
+
+        boolean valid = false;
+        //Different name cases
+        if(targetName.equalsIgnoreCase("US") || targetName.equalsIgnoreCase("USA") || targetName.equalsIgnoreCase("United States of America")){
+            targetName = "United States";
+        }else if(targetName.equalsIgnoreCase("Denmark (Greenland)") || targetName.equalsIgnoreCase("Greenland")){
+            targetName = "Denmark";
+        }else if(targetName.equalsIgnoreCase("UK")){
+            targetName = "United Kingdom";
+        }else if(targetName.equalsIgnoreCase("North Korea")){
+            targetName = "Korea, North";
+        }else if(targetName.equalsIgnoreCase("South Korea")){
+            targetName = "Korea, South";
+        }
+
+        //find country
+        while(pointerCountry!= null){
+            if(pointerCountry.Name.equalsIgnoreCase(targetName.trim())){
+                valid = true;
+                break;
+            }
+            pointerCountry = pointerCountry.next;
+        }
+        return valid;
+
+    }
+    
 
 
     public static void main(String[] args) {
