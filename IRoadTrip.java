@@ -69,8 +69,8 @@ public class IRoadTrip {
             if(totalCountries == 0){
                 String line = states.nextLine();
                 String[] splitLine = line.split("\t");
-                if (splitLine[4].equals("2020-12-31")){
-                    if(splitLine[1].equals("USA")){
+                if (splitLine[4].equalsIgnoreCase("2020-12-31")){
+                    if(splitLine[1].equalsIgnoreCase("USA")){
                         Country c = new Country(splitLine[0], splitLine[1], "United States");
                         headCountry = c;
                         pointerCountry = c;
@@ -85,144 +85,149 @@ public class IRoadTrip {
             }else{
                 String line = states.nextLine();
                 String[] splitLine = line.split("\t");
-                if (splitLine[4].equals("2020-12-31")){
-                    if(splitLine[1].equals("USA")){
+                if (splitLine[4].equalsIgnoreCase("2020-12-31")){
+                    if(splitLine[1].equalsIgnoreCase("USA")){
                         Country c = new Country(splitLine[0], splitLine[1], "United States");
                         pointerCountry.next = c;
                         pointerCountry = c;
                         totalCountries++;
-                    }else if(splitLine[1].equals("TAZ")){
+                    }else if(splitLine[1].equalsIgnoreCase("TAZ")){
                         Country c = new Country(splitLine[0], splitLine[1], "Tanzania");
                         pointerCountry.next = c;
                         pointerCountry = c;
                         totalCountries++;
-                    }else if(splitLine[1].equals("DRV")){
+                    }else if(splitLine[1].equalsIgnoreCase("DRV")){
                         Country c = new Country(splitLine[0], splitLine[1], "Vietnam");
                         pointerCountry.next = c;
                         pointerCountry = c;
                         totalCountries++;
-                    }else if(splitLine[1].equals("PRK")){
+                    }else if(splitLine[1].equalsIgnoreCase("PRK")){
                         Country c = new Country(splitLine[0], splitLine[1], "Korea, North");
                         pointerCountry.next = c;
                         pointerCountry = c;
                         totalCountries++;
-                    }else if(splitLine[1].equals("ROK")){
+                    }else if(splitLine[1].equalsIgnoreCase("ROK")){
                         Country c = new Country(splitLine[0], splitLine[1], "Korea, South");
                         pointerCountry.next = c;
                         pointerCountry = c;
                         totalCountries++;
-                    }else if(splitLine[1].equals("MYA")){
+                    }else if(splitLine[1].equalsIgnoreCase("MYA")){
                         Country c = new Country(splitLine[0], splitLine[1], "Burma");
                         pointerCountry.next = c;
                         pointerCountry = c;
                         totalCountries++;
-                    }else if(splitLine[1].equals("GFR")){
+                    }else if(splitLine[1].equalsIgnoreCase("GFR")){
                         Country c = new Country(splitLine[0], splitLine[1], "Germany");
                         pointerCountry.next = c;
                         pointerCountry = c;
                         totalCountries++;
-                    }else if(splitLine[1].equals("CZR")){
+                    }else if(splitLine[1].equalsIgnoreCase("CZR")){
                         Country c = new Country(splitLine[0], splitLine[1], "Czechia");
                         pointerCountry.next = c;
                         pointerCountry = c;
                         totalCountries++;
-                    }else if(splitLine[1].equals("ITA")){
+                    }else if(splitLine[1].equalsIgnoreCase("ITA")){
                         Country c = new Country(splitLine[0], splitLine[1], "Italy");
                         pointerCountry.next = c;
                         pointerCountry = c;
                         totalCountries++;
-                    }else if(splitLine[1].equals("MAC")){
+                    }else if(splitLine[1].equalsIgnoreCase("MAC")){
                         Country c = new Country(splitLine[0], splitLine[1], "North Macedonia");
                         pointerCountry.next = c;
                         pointerCountry = c;
                         totalCountries++;
-                    }else if(splitLine[1].equals("BOS")){
+                    }else if(splitLine[1].equalsIgnoreCase("BOS")){
                         Country c = new Country(splitLine[0], splitLine[1], "Bosnia and Herzegovina");
                         pointerCountry.next = c;
                         pointerCountry = c;
                         totalCountries++; 
-                    }else if(splitLine[1].equals("RUS")){
+                    }else if(splitLine[1].equalsIgnoreCase("RUS")){
                         Country c = new Country(splitLine[0], splitLine[1], "Russia");
                         pointerCountry.next = c;
                         pointerCountry = c;
                         totalCountries++;
-                    }else if(splitLine[1].equals("BLR")){
+                    }else if(splitLine[1].equalsIgnoreCase("BLR")){
                         Country c = new Country(splitLine[0], splitLine[1], "Belarus");
                         pointerCountry.next = c;
                         pointerCountry = c;
                         totalCountries++; 
-                    }else if(splitLine[1].equals("CAP")){
+                    }else if(splitLine[1].equalsIgnoreCase("CAP")){
                         Country c = new Country(splitLine[0], splitLine[1], "Cabo Verde");
                         pointerCountry.next = c;
                         pointerCountry = c;
                         totalCountries++; 
-                    }else if(splitLine[1].equals("EQG")){
+                    }else if(splitLine[1].equalsIgnoreCase("EQG")){
                         Country c = new Country(splitLine[0], splitLine[1], "Equatorial Guinea");
                         pointerCountry.next = c;
                         pointerCountry = c;
                         totalCountries++;
-                    }else if(splitLine[1].equals("CDI")){
+                    }else if(splitLine[1].equalsIgnoreCase("CDI")){
                         Country c = new Country(splitLine[0], splitLine[1], "Cote d'Ivoire");
                         pointerCountry.next = c;
                         pointerCountry = c;
                         totalCountries++; 
-                    }else if(splitLine[1].equals("GAM")){
+                    }else if(splitLine[1].equalsIgnoreCase("GAM")){
                         Country c = new Country(splitLine[0], splitLine[1], "Gambia, The");
                         pointerCountry.next = c;
                         pointerCountry = c;
                         totalCountries++;
-                    }else if(splitLine[1].equals("GUI")){
+                    }else if(splitLine[1].equalsIgnoreCase("GUI")){
                         Country c = new Country(splitLine[0], splitLine[1], "Guinea");
                         pointerCountry.next = c;
                         pointerCountry = c;
                         totalCountries++; 
-                    }else if(splitLine[1].equals("BFO")){
+                    }else if(splitLine[1].equalsIgnoreCase("BFO")){
                         Country c = new Country(splitLine[0], splitLine[1], "Burkina Faso");
                         pointerCountry.next = c;
                         pointerCountry = c;
                         totalCountries++;
-                    }else if(splitLine[1].equals("DRC")){
+                    }else if(splitLine[1].equalsIgnoreCase("DRC")){
                         Country c = new Country(splitLine[0], splitLine[1], "Democratic Republic of the Congo");
                         pointerCountry.next = c;
                         pointerCountry = c;
                         totalCountries++; 
-                    }else if(splitLine[1].equals("ZIM")){
+                    }else if(splitLine[1].equalsIgnoreCase("ZIM")){
                         Country c = new Country(splitLine[0], splitLine[1], "Zimbabwe");
                         pointerCountry.next = c;
                         pointerCountry = c;
                         totalCountries++;
-                    }else if(splitLine[1].equals("IRN")){
+                    }else if(splitLine[1].equalsIgnoreCase("IRN")){
                         Country c = new Country(splitLine[0], splitLine[1], "Iran");
                         pointerCountry.next = c;
                         pointerCountry = c;
                         totalCountries++;
-                    }else if(splitLine[1].equals("TUR")){
+                    }else if(splitLine[1].equalsIgnoreCase("TUR")){
                         Country c = new Country(splitLine[0], splitLine[1], "Turkey");
                         pointerCountry.next = c;
                         pointerCountry = c;
                         totalCountries++;
-                    }else if(splitLine[1].equals("YEM")){
+                    }else if(splitLine[1].equalsIgnoreCase("YEM")){
                         Country c = new Country(splitLine[0], splitLine[1], "Yemen");
                         pointerCountry.next = c;
                         pointerCountry = c;
                         totalCountries++;
-                    }else if(splitLine[1].equals("KYR")){
+                    }else if(splitLine[1].equalsIgnoreCase("KYR")){
                         Country c = new Country(splitLine[0], splitLine[1], "Kyrgyzstan");
                         pointerCountry.next = c;
                         pointerCountry = c;
                         totalCountries++;
-                    }else if(splitLine[1].equals("SRI")){
+                    }else if(splitLine[1].equalsIgnoreCase("SRI")){
                         Country c = new Country(splitLine[0], splitLine[1], "Sri Lanka");
                         pointerCountry.next = c;
                         pointerCountry = c;
                         totalCountries++;
-                    }else if(splitLine[1].equals("CAM")){
+                    }else if(splitLine[1].equalsIgnoreCase("CAM")){
                         Country c = new Country(splitLine[0], splitLine[1], "Cambodia");
                         pointerCountry.next = c;
                         pointerCountry = c;
                         totalCountries++;
-                    }else if(splitLine[1].equals("ETM")){
+                    }else if(splitLine[1].equalsIgnoreCase("ETM")){
                         Country c = new Country(splitLine[0], splitLine[1], "Timor-Leste");
+                        pointerCountry.next = c;
+                        pointerCountry = c;
+                        totalCountries++;
+                    }else if(splitLine[1].equalsIgnoreCase("SUR")){
+                        Country c = new Country(splitLine[0], splitLine[1], "Suriname");
                         pointerCountry.next = c;
                         pointerCountry = c;
                         totalCountries++;
@@ -236,12 +241,12 @@ public class IRoadTrip {
             }
         }
 
-        /*print list of countries
+        //print list of countries
         pointerCountry = headCountry;
         while(pointerCountry.next != null){
             System.out.println(pointerCountry.Name);
             pointerCountry = pointerCountry.next;
-        }*/
+        }
 
         return headCountry;
 
@@ -259,7 +264,7 @@ public class IRoadTrip {
                     String neighbors = borderingNeighbors.nextLine();
                     String[] splitNeighbors = neighbors.split("= ");
                     //retrive all neighbors
-                    if(splitNeighbors[0].trim().equals(pointerCountry.Name)){
+                    if(splitNeighbors[0].trim().equalsIgnoreCase(pointerCountry.Name)){
                             mapOfNeighbors.put(pointerCountry, setNeighborsList(splitNeighbors, distances, headCountry)); //separate method to add neighbors                     
                     }
                 }
@@ -276,21 +281,23 @@ public class IRoadTrip {
         Country pointerCountry = head;
         String targetName = target;
         //Different name cases
-        if(targetName.equals("US") || targetName.equals("USA") || targetName.equals("United States of America")){
+        if(targetName.equals("US") || targetName.equalsIgnoreCase("USA") || targetName.equalsIgnoreCase("United States of America")){
             targetName = "United States";
-        }else if(targetName.equals("Denmark (Greenland)") || targetName.equals("Greenland")){
+        }else if(targetName.equalsIgnoreCase("Denmark (Greenland)") || targetName.equalsIgnoreCase("Greenland")){
             targetName = "Denmark";
-        }else if(targetName.equals("UK")){
+        }else if(targetName.equalsIgnoreCase("UK")){
             targetName = "United Kingdom";
-        }else if(targetName.equals("North Korea")){
+        }else if(targetName.equalsIgnoreCase("North Korea")){
             targetName = "Korea, North";
-        }else if(targetName.equals("South Korea")){
+        }else if(targetName.equalsIgnoreCase("South Korea")){
             targetName = "Korea, South";
+        }else if(targetName.equalsIgnoreCase("Surinam")){
+            targetName = "Suriname";
         }
 
         //find country
         while(pointerCountry!= null){
-            if(pointerCountry.Name.equals(targetName.trim())){
+            if(pointerCountry.Name.equalsIgnoreCase(targetName.trim())){
                 break;
             }
             pointerCountry = pointerCountry.next;
@@ -329,29 +336,34 @@ public class IRoadTrip {
                 while(isNum(split2[index1]) == false){
                     index1++;
                 }
+
                 String c = split1[i].substring(0,index1).trim();
                 Country neighborCountry = findCountry(headCountry, c);
-                try{
-                    Scanner scan = new Scanner(distances);
-                    String distanceText = "";
-                    int distance = 0;
-                    while(scan.hasNextLine()){
-                        distanceText = scan.nextLine();
-                        String[] splitDistanceText = distanceText.split(",");
-                        if(country.Code.equalsIgnoreCase(splitDistanceText[1]) && neighborCountry.Code.equalsIgnoreCase(splitDistanceText[3])){
-                            distance = Integer.parseInt(splitDistanceText[4]);
-                            break;
+                if(validateInput(headCountry, c)){
+                    try{
+                        Scanner scan = new Scanner(distances);
+                        String distanceText = "";
+                        int distance = 0;
+                        System.out.println(neighborCountry.Name);
+                        System.out.println(c);
+                        while(scan.hasNextLine()){
+                            distanceText = scan.nextLine();
+                            String[] splitDistanceText = distanceText.split(",");
+                            if(country.Code.equalsIgnoreCase(splitDistanceText[1]) && neighborCountry.Code.equalsIgnoreCase(splitDistanceText[3])){
+                                distance = Integer.parseInt(splitDistanceText[4]);
+                                break;
+                            }
                         }
+                        //hashmap
+                        listOfNeighbors.put(neighborCountry.Name, distance);
+                    }catch (FileNotFoundException FNFE){
+                        System.out.println("ERROR: Please enter the following required files - 'borders.txt' 'capdist.csv' 'state_name.tsv'");
+                        System.exit(0);
                     }
-                    //hashmap
-                    listOfNeighbors.put(neighborCountry.Name, distance);
-                }catch (FileNotFoundException FNFE){
-                    System.out.println("ERROR: Please enter the following required files - 'borders.txt' 'capdist.csv' 'state_name.tsv'");
-                    System.exit(0);
                 }
 
             }
-        System.out.println(listOfNeighbors);
+        //System.out.println(listOfNeighbors);
             
         }
         return listOfNeighbors;
@@ -425,6 +437,8 @@ public class IRoadTrip {
             targetName = "Korea, North";
         }else if(targetName.equalsIgnoreCase("South Korea")){
             targetName = "Korea, South";
+        }else if(targetName.equalsIgnoreCase("Surinam")){
+            targetName = "Suriname";
         }
 
         //find country
