@@ -48,7 +48,7 @@ public class IRoadTrip {
             File stateFile = new File(args[2]);
             Scanner stateScanner = new Scanner(stateFile);
 
-            findNeighborsList(bordersFile, createCountryList(stateScanner));
+            findNeighborsList(bordersFile, capDistFile, createCountryList(stateScanner));
 
         }catch (FileNotFoundException FNFE){
             System.out.println("ERROR: Please enter the following required files - 'borders.txt' 'capdist.csv' 'state_name.tsv'");
@@ -248,7 +248,7 @@ public class IRoadTrip {
     }
 
     //FIND ALL NEIGHBORS AND DISTANCES//
-    public void findNeighborsList(File borders, Country headCountry){
+    public void findNeighborsList(File borders, File distances, Country headCountry){
         Country pointerCountry = headCountry;
         HashMap<Country, HashMap> mapOfNeighbors = new HashMap<Country, HashMap>();
 
@@ -260,7 +260,7 @@ public class IRoadTrip {
                     String[] splitNeighbors = neighbors.split("= ");
                     //retrive all neighbors
                     if(splitNeighbors[0].trim().equals(pointerCountry.Name)){
-                            mapOfNeighbors.put(pointerCountry, setNeighborsList(splitNeighbors, headCountry)); //separate method to add neighbors 
+                            mapOfNeighbors.put(pointerCountry, setNeighborsList(splitNeighbors, distances, headCountry)); //separate method to add neighbors                     
                     }
                 }
                 pointerCountry = pointerCountry.next;
@@ -271,6 +271,7 @@ public class IRoadTrip {
         }
     }
 
+    //FIND COUNTRY IN FULL COUNTRY LINKED LIST//
     public Country findCountry(Country head, String target){
         Country pointerCountry = head;
         String targetName = target;
@@ -297,6 +298,7 @@ public class IRoadTrip {
         return pointerCountry;
     }
 
+    //CHECK IF STRING IS NUMERICAL//
     public boolean isNum(String num){
         if(num == null){
             return false;
@@ -309,15 +311,15 @@ public class IRoadTrip {
         return true;
     }
 
-
-
-    public HashMap setNeighborsList(String[] neighbors, Country headCountry){
-        HashMap<Country, Double> listOfNeighbors = new HashMap<Country, Double>();
-        Country Neighbor;
+    //CREATE INDIVIDUAL HASHMAPS OF NEIGHBORS FOR EACH COUNTRY//
+    public HashMap setNeighborsList(String[] neighbors, File distances, Country headCountry){
+        HashMap<String, Integer> listOfNeighbors = new HashMap<String, Integer>();
+        Country country = findCountry(headCountry, neighbors[0]);
         boolean foundLetters = true;
         boolean foundNumbers = false;
 
         //Set individual hashmaps
+        System.out.println("----- Country Name: "+ country.Name );
         if(neighbors.length >= 2){
             String[] split1 = neighbors[1].split(";");
             for(int i = 0; i < split1.length; i++){
@@ -327,33 +329,44 @@ public class IRoadTrip {
                 while(isNum(split2[index1]) == false){
                     index1++;
                 }
-                String country = split1[i].substring(0,index1).trim();
-
-                //Parsing out neighbor distance
-                int index2 = index1;
-                while(isNum(split2[index1]) == true || split2[index1].equals(",") || split2[index1].equals(".")){
-                    index1++;
+                String c = split1[i].substring(0,index1).trim();
+                Country neighborCountry = findCountry(headCountry, c);
+                try{
+                    Scanner scan = new Scanner(distances);
+                    String distanceText = "";
+                    int distance = 0;
+                    while(scan.hasNextLine()){
+                        distanceText = scan.nextLine();
+                        String[] splitDistanceText = distanceText.split(",");
+                        if(country.Code.equalsIgnoreCase(splitDistanceText[1]) && neighborCountry.Code.equalsIgnoreCase(splitDistanceText[3])){
+                            distance = Integer.parseInt(splitDistanceText[4]);
+                            break;
+                        }
+                    }
+                    //hashmap
+                    listOfNeighbors.put(neighborCountry.Name, distance);
+                }catch (FileNotFoundException FNFE){
+                    System.out.println("ERROR: Please enter the following required files - 'borders.txt' 'capdist.csv' 'state_name.tsv'");
+                    System.exit(0);
                 }
-                double distance = Double.parseDouble(split1[i].substring(index2, index1+1).trim().replaceAll(",", ""));
-
-                //hashmap
-                listOfNeighbors.put(findCountry(headCountry, country), distance);
 
             }
+        System.out.println(listOfNeighbors);
             
         }
         return listOfNeighbors;
 
     }
 
+    //GET DISTANCE BETWEEN TWO COUNTRIES//
     public int getDistance (String country1, String country2) {
         // Replace with your code
         return -1;
     }
 
-
+    //FIND SHORTEST PATH BETWEEN TWO COUNTRIES//
     public List<String> findPath (String country1, String country2) {
-        // Replace with your code
+        
         return null;
     }
 
@@ -391,9 +404,7 @@ public class IRoadTrip {
 
         //begin finding shortest path between countries
         if(valid1 == true && valid2 == true){
-            System.out.println("YOUR CHOICES: ");
-            System.out.println("First Country: "+ firstCountry);
-            System.out.println("Second Country: "+ secondCountry);
+            findPath(firstCountry, secondCountry);
         }
 
     }
