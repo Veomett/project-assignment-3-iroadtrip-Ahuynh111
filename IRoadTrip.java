@@ -39,7 +39,7 @@ public class IRoadTrip {
             System.out.println("ERROR: Please enter the following required files - 'borders.txt' 'capdist.csv' 'state_name.tsv'");
             System.exit(0);
         }
-        
+    
         try{
             File bordersFile = new File(args[0]);
             Scanner borderScanner = new Scanner(bordersFile);
@@ -47,15 +47,11 @@ public class IRoadTrip {
             Scanner capDistScanner = new Scanner(capDistFile);
             File stateFile = new File(args[2]);
             Scanner stateScanner = new Scanner(stateFile);
-
             findNeighborsList(bordersFile, capDistFile, createCountryList(stateScanner));
-
         }catch (FileNotFoundException FNFE){
             System.out.println("ERROR: Please enter the following required files - 'borders.txt' 'capdist.csv' 'state_name.tsv'");
             System.exit(0);
         }
-
-
     }
 
     //CREATE LIST OF COUNTRIES//
@@ -231,6 +227,12 @@ public class IRoadTrip {
                         pointerCountry.next = c;
                         pointerCountry = c;
                         totalCountries++;
+                    }else if(splitLine[1].equalsIgnoreCase("United Arab Emirates")){
+                        Country c = new Country(splitLine[0], splitLine[1], "UAE");
+                        pointerCountry.next = c;
+                        pointerCountry = c;
+                        totalCountries++;
+                    }
                     }else{
                         Country c = new Country(splitLine[0], splitLine[1], splitLine[2].trim());
                         pointerCountry.next = c;
@@ -294,6 +296,8 @@ public class IRoadTrip {
             targetName = "Korea, South";
         }else if(targetName.equalsIgnoreCase("Surinam")){
             targetName = "Suriname";
+        }else if(targetName.equalsIgnoreCase("United Arab Emirates")){
+            targetName = "UAE";
         }
 
         //find country
@@ -363,8 +367,6 @@ public class IRoadTrip {
             }            
         }
         return listOfNeighbors;
-
-
     }
 
     //GET DISTANCE BETWEEN TWO COUNTRIES//
@@ -373,13 +375,22 @@ public class IRoadTrip {
         return -1;
     }
 
-    //FIND SHORTEST PATH BETWEEN TWO COUNTRIES//
+    //FIND SHORTEST PATH BETWEEN TWO COUNTRIES --> Dijkstras//
     public List<String> findPath (String country1, String country2) {
-        
+        //find country associated with inputs
+        Country firstCountry = findCountry(headCountry, country1);
+        Country secondCountry = findCountry(headCountry, country2);
+
+        //
+
+
         return null;
     }
 
+    //HEAPIFY UP METHOD//
+    public 
 
+    //PROMPT USER TO ENTER IN VALID COUNTRIES//
     public void acceptUserInput() {
         Scanner scan = new Scanner(System.in);
         boolean valid1 = false;
@@ -418,6 +429,7 @@ public class IRoadTrip {
 
     }
 
+    //CONFIRM IF GIVEN COUNTRY IS WITHING COUNTRY LIST//
     public boolean validateInput(Country headCountry, String targetCountry){
         Country pointerCountry = headCountry;
         String targetName = targetCountry;
@@ -436,6 +448,8 @@ public class IRoadTrip {
             targetName = "Korea, South";
         }else if(targetName.equalsIgnoreCase("Surinam")){
             targetName = "Suriname";
+        }else if(targetName.equalsIgnoreCase("United Arab Emirates")){
+            targetName = "UAE";
         }
 
         //find country
