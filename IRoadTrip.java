@@ -33,7 +33,7 @@ class Country{
 
 public class IRoadTrip {
     Country headCountry;
-    HashMap<Country, HashMap> mapOfCountries = new HashMap<Country, HashMap>();
+    HashMap<Country, HashMap<Country, Integer>> mapOfCountries = new HashMap<Country, HashMap<Country, Integer>>();
 
 
     //CONSTRUCTOR//
@@ -282,11 +282,11 @@ public class IRoadTrip {
     }
 
     //FIND COUNTRY IN FULL COUNTRY LINKED LIST//
-    public Country findCountry(Country head, String target){
-        Country pointerCountry = head;
+    public Country findCountry(String target){
+        Country pointerCountry = headCountry;
         String targetName = target;
         //Different name cases
-        if(targetName.equals("US") || targetName.equalsIgnoreCase("USA") || targetName.equalsIgnoreCase("United States of America")){
+        if(targetName.equalsIgnoreCase("US") || targetName.equalsIgnoreCase("USA") || targetName.equalsIgnoreCase("United States of America")){
             targetName = "United States";
         }else if(targetName.equalsIgnoreCase("Denmark (Greenland)") || targetName.equalsIgnoreCase("Greenland")){
             targetName = "Denmark";
@@ -327,8 +327,8 @@ public class IRoadTrip {
 
     //CREATE INDIVIDUAL HASHMAPS OF NEIGHBORS FOR EACH COUNTRY//
     public HashMap setNeighborsList(String[] neighbors, File distances, Country headCountry){
-        HashMap<String, Integer> listOfNeighbors = new HashMap<String, Integer>();
-        Country country = findCountry(headCountry, neighbors[0]);
+        HashMap<Country, Integer> listOfNeighbors = new HashMap<Country, Integer>();
+        Country country = findCountry(neighbors[0]);
         boolean foundLetters = true;
         boolean foundNumbers = false;
 
@@ -344,7 +344,7 @@ public class IRoadTrip {
                 }
 
                 String c = split1[i].substring(0,index1).trim();
-                Country neighborCountry = findCountry(headCountry, c);
+                Country neighborCountry = findCountry(c);
                 if(validateInput(headCountry, c)){
                     try{
                         Scanner scan = new Scanner(distances);
@@ -359,7 +359,7 @@ public class IRoadTrip {
                             }
                         }
                         //hashmap
-                        listOfNeighbors.put(neighborCountry.Name, distance);
+                        listOfNeighbors.put(neighborCountry, distance);
                     }catch (FileNotFoundException FNFE){
                         System.out.println("ERROR: Please enter the following required files - 'borders.txt' 'capdist.csv' 'state_name.tsv'");
                         System.exit(0);
@@ -373,15 +373,19 @@ public class IRoadTrip {
 
     //GET DISTANCE BETWEEN TWO COUNTRIES//
     public int getDistance (String country1, String country2) {
-        Country firstCountry = findCountry(headCountry, country1);
-        Country secondCountry = findCountry(headCountry, country2);
-        List<HashMap> neighbors;
+        Country firstCountry = findCountry(country1);
+        Country secondCountry = findCountry(country2);
+        HashMap<Country, Integer> pointerHashMap; 
         if(firstCountry.Name == null){
             return -1;
         }else if(secondCountry.Name == null){
             return -1;
         }else{
-            System.out.println(mapOfCountries.get(firstCountry));
+            for(Country i: mapOfCountries.get(firstCountry).keySet()){
+               if(i.equals(secondCountry)){
+                return(mapOfCountries.get(firstCountry).get(secondCountry));
+               }
+            }
         }
         return -1;
     }
@@ -448,14 +452,14 @@ public class IRoadTrip {
             }
         }
 
-        //begin finding shortest path between countries
+        /*begin finding shortest path between countries
         if(valid1 == true && valid2 == true){
-            getDistance(firstCountry, secondCountry);
-        }
+            getDistance(firstCountry, secondCountry); //distance between two bordering countries
+        }*/
 
     }
 
-    //CONFIRM IF GIVEN COUNTRY IS WITHING COUNTRY LIST//
+    //CONFIRM IF GIVEN COUNTRY IS WITHIN COUNTRY LIST//
     public boolean validateInput(Country headCountry, String targetCountry){
         Country pointerCountry = headCountry;
         String targetName = targetCountry;
