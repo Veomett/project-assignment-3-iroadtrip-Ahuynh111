@@ -18,10 +18,9 @@ class Country{
     //Linked list of Countries
     Country next; // general next country in mass list of countries
 
-
     //Linked list of Neighbors
-    Country nextNeighbor;
     Country headNeighbor;
+    Country nextNeighbor;
 
     //COUNTRY CONSTRUCTOR//
     Country(String num, String c, String n){
@@ -36,7 +35,7 @@ class Country{
 }
 
 public class IRoadTrip {
-    /*public class Graph{
+    public class Graph{
         int totalCountries;
 
         //ADD/FIND EDGE//
@@ -50,7 +49,7 @@ public class IRoadTrip {
             System.out.println("Country 1: "+ firstCountry.Name + " Country 2: "+ secondCountry.Name + " Weight :" + findEdge(firstCountry, secondCountry));
         }
 
-        //PRINT ARRAYGRAPH//
+        /*PRINT ARRAYGRAPH//
         void printArrayGraph(){
             for(int i = 0; i < arrayGraph.length; i++){
                 if(arrayGraph[i]!= null){
@@ -62,7 +61,7 @@ public class IRoadTrip {
                 System.out.println();
                 }
             }
-        }
+        }*/
     }
 
     public class Edge{
@@ -77,7 +76,7 @@ public class IRoadTrip {
             country2 = secondCountry;
             weight = getDistance(firstCountry, secondCountry);
         }
-    }*/
+    }
 
 
     Country headCountry;
@@ -99,8 +98,7 @@ public class IRoadTrip {
             Scanner capDistScanner = new Scanner(capDistFile);
             File stateFile = new File(args[2]);
             Scanner stateScanner = new Scanner(stateFile);
-            //findNeighborsList(bordersFile, capDistFile, createCountryList(stateScanner));
-            createCountryList(borderScanner, stateScanner);
+            findNeighborsList(bordersFile, capDistFile, createCountryList(stateScanner));
         }catch (FileNotFoundException FNFE){
             System.out.println("ERROR: Please enter the following required files - 'borders.txt' 'capdist.csv' 'state_name.tsv'");
             System.exit(0);
@@ -108,7 +106,7 @@ public class IRoadTrip {
     }
 
     //CREATE LIST OF COUNTRIES//
-    /*public Country createCountryList (Scanner states){
+    public Country createCountryList (Scanner states){
         headCountry = new Country();
         Country pointerCountry  = new Country();
         int totalCountries = 0;
@@ -304,35 +302,21 @@ public class IRoadTrip {
             }
         }
 
-        print list of countries
+        /*print list of countries
         pointerCountry = headCountry;
         while(pointerCountry.next != null){
             System.out.println(pointerCountry.Name);
             pointerCountry = pointerCountry.next;
-        }
+        }*/
 
         return headCountry;
 
-    }*/
-
-
-    public void createCountryList(Scanner border, Scanner states){
-        ArrayList<String> allCodes = new ArrayList<String>();
-        while(states.hasNextLine()){
-            String[] split = states.nextLine().split("\t");
-            if(split[4].equals("2020-12-31")){
-                allCodes.add(split[0]);
-            }
-        }
-        /*while(border.hasNextLine()){
-            System.out.println(border.nextLine());
-        }*/
     }
 
 
 
 
-  /*  //FIND ALL NEIGHBORS AND DISTANCES//
+   //FIND ALL NEIGHBORS AND DISTANCES//
     public void findNeighborsList(File borders, File distances, Country headCountry){
         Country pointerCountry = headCountry;
 
@@ -521,10 +505,45 @@ public class IRoadTrip {
 
     //FIND SHORTEST PATH BETWEEN TWO COUNTRIES //
     public List<String> findPath (String country1, String country2) {
+        List<String> description = new ArrayList<String>();
         Country firstCountry = findCountry(country1);
         Country secondCountry = findCountry(country2);
+        Country current = firstCountry;
+        Boolean found = false;
 
-        return null;
+        HashMap<Country, Integer> neighbors = mapOfCountries.get(firstCountry);
+        while(found == false){
+            for(Country i: neighbors.keySet()){
+                int shortestDistance = -1;
+                Country closest = new Country();
+                if(i.equals(secondCountry)){
+                    description.add(current.Name+ " -->" + secondCountry.Name+ "(" + mapOfCountries.get(current).get(i) + " km.)");
+                    found = true;
+                    break;
+                }else{
+                    if(shortestDistance == -1){
+                        closest = i;
+                    }else{
+                        if(neighbors.get(i) < shortestDistance){
+                            closest = i;
+                            shortestDistance = neighbors.get(i);
+                        }
+                    }
+
+                    description.add(current.Name+ " -->" + closest.Name+ "(" + shortestDistance+ " km.)");
+                    current = closest;
+                    neighbors = mapOfCountries.get(current);
+                }
+            }
+        }
+        printDescription(description);
+        return description;
+
+    }
+
+    //PRINT DESCRIPTION//
+    public void printDescription(List<String> l){
+        System.out.println(l);
     }
 
 
@@ -560,9 +579,9 @@ public class IRoadTrip {
             }
         }
 
-        /*begin finding shortest path between countries
+        //begin finding shortest path between countries
         if(valid1 == true && valid2 == true){
-            getDistance(firstCountry, secondCountry); //distance between two bordering countries
+            findPath(firstCountry, secondCountry); //distance between two bordering countries
         }
 
     }
@@ -600,15 +619,14 @@ public class IRoadTrip {
         }
         return valid;
 
-    }*/
+    }
     
 
 
     public static void main(String[] args) {
         IRoadTrip a3 = new IRoadTrip(args);
-        //a3.createGraph();
-    
-        //a3.acceptUserInput();
+        a3.createGraph();
+        a3.acceptUserInput();
     }
 
 }
