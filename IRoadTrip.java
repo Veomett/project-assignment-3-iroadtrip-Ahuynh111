@@ -50,9 +50,13 @@ public class IRoadTrip {
     public class Edge{
         //Edge Variables
         int weight = 0;
+        Country country1;
+        Country country2;
 
         //EDGE CONSTRUCTOR//
         Edge(Country firstCountry, Country secondCountry){
+            country1 = firstCountry;
+            country2 = secondCountry;
             weight = getDistance(firstCountry, secondCountry);
         }
     }
@@ -436,7 +440,6 @@ public class IRoadTrip {
     public void createGraph(){
         Graph graph = new Graph();
         for(Country i: mapOfCountries.keySet()){
-            System.out.println("-------"+i.Name+"-------");
             for(Country j : mapOfCountries.get(i).keySet()){
                 graph.findEdge(i,j);
                 graph.print(i,j);
@@ -448,8 +451,11 @@ public class IRoadTrip {
 
 
 
-    //FIND SHORTEST PATH BETWEEN TWO COUNTRIES --> Dijkstras//
+
+    //FIND SHORTEST PATH BETWEEN TWO COUNTRIES //
     public List<String> findPath (String country1, String country2) {
+        Country firstCountry = findCountry(country1);
+        Country secondCountry = findCountry(country2);
 
         return null;
     }
