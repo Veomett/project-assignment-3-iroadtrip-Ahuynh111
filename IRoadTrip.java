@@ -9,21 +9,25 @@ import java.util.ArrayList;
 
 class Country{
     //Country Identifiers
-    String Name;
-    String Code; 
-    int Number;
+    String Name ="";
+    String Code =""; 
+    int Number = -1;
     int distanceFrom;
     int heapIndex;
 
-    //Linked list of Neighbors (add into hashmap later)
+    //Linked list of Countries
     Country next; // general next country in mass list of countries
 
 
+    //Linked list of Neighbors
+    Country nextNeighbor;
+    Country headNeighbor;
+
     //COUNTRY CONSTRUCTOR//
     Country(String num, String c, String n){
+        Number = Integer.parseInt(num);
         Name = n;
         Code = c;
-        Number = Integer.parseInt(num);
     }
 
     //DEFAULT COUNTRY CONSTRUCTOR//
@@ -32,7 +36,7 @@ class Country{
 }
 
 public class IRoadTrip {
-    public class Graph{
+    /*public class Graph{
         int totalCountries;
 
         //ADD/FIND EDGE//
@@ -44,6 +48,20 @@ public class IRoadTrip {
         //PRINT EDGE//
         void print(Country firstCountry, Country secondCountry){
             System.out.println("Country 1: "+ firstCountry.Name + " Country 2: "+ secondCountry.Name + " Weight :" + findEdge(firstCountry, secondCountry));
+        }
+
+        //PRINT ARRAYGRAPH//
+        void printArrayGraph(){
+            for(int i = 0; i < arrayGraph.length; i++){
+                if(arrayGraph[i]!= null){
+                    Country pointerCountry = arrayGraph[i];
+                    while(pointerCountry.nextNeighbor!= null){
+                        System.out.print(pointerCountry.nextNeighbor.Name + "//");
+                        pointerCountry = pointerCountry.nextNeighbor;
+                    }
+                System.out.println();
+                }
+            }
         }
     }
 
@@ -59,12 +77,12 @@ public class IRoadTrip {
             country2 = secondCountry;
             weight = getDistance(firstCountry, secondCountry);
         }
-    }
+    }*/
 
 
     Country headCountry;
     HashMap<Country, HashMap<Country, Integer>> mapOfCountries = new HashMap<Country, HashMap<Country, Integer>>();
-
+    Country[] arrayGraph = new Country[253];
 
     //CONSTRUCTOR//
     public IRoadTrip (String [] args) { 
@@ -81,7 +99,8 @@ public class IRoadTrip {
             Scanner capDistScanner = new Scanner(capDistFile);
             File stateFile = new File(args[2]);
             Scanner stateScanner = new Scanner(stateFile);
-            findNeighborsList(bordersFile, capDistFile, createCountryList(stateScanner));
+            //findNeighborsList(bordersFile, capDistFile, createCountryList(stateScanner));
+            createCountryList(borderScanner, stateScanner);
         }catch (FileNotFoundException FNFE){
             System.out.println("ERROR: Please enter the following required files - 'borders.txt' 'capdist.csv' 'state_name.tsv'");
             System.exit(0);
@@ -89,7 +108,7 @@ public class IRoadTrip {
     }
 
     //CREATE LIST OF COUNTRIES//
-    public Country createCountryList (Scanner states){
+    /*public Country createCountryList (Scanner states){
         headCountry = new Country();
         Country pointerCountry  = new Country();
         int totalCountries = 0;
@@ -104,13 +123,14 @@ public class IRoadTrip {
                         Country c = new Country(splitLine[0], splitLine[1], "United States");
                         headCountry = c;
                         pointerCountry = c;
-                        totalCountries++;
+                        c.Number = totalCountries;
                     }else{
                         Country c = new Country(splitLine[0], splitLine[1], splitLine[2].trim());
                         headCountry = c;
                         pointerCountry = c;
-                        totalCountries++;                        
+                        c.Number = totalCountries;                        
                     }
+                    totalCountries++;
                 }
             }else{
                 String line = states.nextLine();
@@ -120,174 +140,199 @@ public class IRoadTrip {
                         Country c = new Country(splitLine[0], splitLine[1], "United States");
                         pointerCountry.next = c;
                         pointerCountry = c;
-                        totalCountries++;
+                        c.Number = totalCountries;
                     }else if(splitLine[1].equalsIgnoreCase("TAZ")){
                         Country c = new Country(splitLine[0], splitLine[1], "Tanzania");
                         pointerCountry.next = c;
                         pointerCountry = c;
-                        totalCountries++;
+                        c.Number = totalCountries;
                     }else if(splitLine[1].equalsIgnoreCase("DRV")){
                         Country c = new Country(splitLine[0], splitLine[1], "Vietnam");
                         pointerCountry.next = c;
                         pointerCountry = c;
-                        totalCountries++;
+                        c.Number = totalCountries;
                     }else if(splitLine[1].equalsIgnoreCase("PRK")){
                         Country c = new Country(splitLine[0], splitLine[1], "Korea, North");
                         pointerCountry.next = c;
                         pointerCountry = c;
-                        totalCountries++;
+                        c.Number = totalCountries;
                     }else if(splitLine[1].equalsIgnoreCase("ROK")){
                         Country c = new Country(splitLine[0], splitLine[1], "Korea, South");
                         pointerCountry.next = c;
                         pointerCountry = c;
-                        totalCountries++;
+                        c.Number = totalCountries;
                     }else if(splitLine[1].equalsIgnoreCase("MYA")){
                         Country c = new Country(splitLine[0], splitLine[1], "Burma");
                         pointerCountry.next = c;
                         pointerCountry = c;
-                        totalCountries++;
+                        c.Number = totalCountries;
                     }else if(splitLine[1].equalsIgnoreCase("GFR")){
                         Country c = new Country(splitLine[0], splitLine[1], "Germany");
                         pointerCountry.next = c;
                         pointerCountry = c;
-                        totalCountries++;
+                        c.Number = totalCountries;
                     }else if(splitLine[1].equalsIgnoreCase("CZR")){
                         Country c = new Country(splitLine[0], splitLine[1], "Czechia");
                         pointerCountry.next = c;
                         pointerCountry = c;
-                        totalCountries++;
+                        c.Number = totalCountries;
                     }else if(splitLine[1].equalsIgnoreCase("ITA")){
                         Country c = new Country(splitLine[0], splitLine[1], "Italy");
                         pointerCountry.next = c;
                         pointerCountry = c;
-                        totalCountries++;
+                        c.Number = totalCountries;
                     }else if(splitLine[1].equalsIgnoreCase("MAC")){
                         Country c = new Country(splitLine[0], splitLine[1], "North Macedonia");
                         pointerCountry.next = c;
                         pointerCountry = c;
-                        totalCountries++;
+                        c.Number = totalCountries;
                     }else if(splitLine[1].equalsIgnoreCase("BOS")){
                         Country c = new Country(splitLine[0], splitLine[1], "Bosnia and Herzegovina");
                         pointerCountry.next = c;
                         pointerCountry = c;
-                        totalCountries++; 
+                        c.Number = totalCountries; 
                     }else if(splitLine[1].equalsIgnoreCase("RUS")){
                         Country c = new Country(splitLine[0], splitLine[1], "Russia");
                         pointerCountry.next = c;
                         pointerCountry = c;
-                        totalCountries++;
+                        c.Number = totalCountries;
                     }else if(splitLine[1].equalsIgnoreCase("BLR")){
                         Country c = new Country(splitLine[0], splitLine[1], "Belarus");
                         pointerCountry.next = c;
                         pointerCountry = c;
-                        totalCountries++; 
+                        c.Number = totalCountries; 
                     }else if(splitLine[1].equalsIgnoreCase("CAP")){
                         Country c = new Country(splitLine[0], splitLine[1], "Cabo Verde");
                         pointerCountry.next = c;
                         pointerCountry = c;
-                        totalCountries++; 
+                        c.Number = totalCountries;
                     }else if(splitLine[1].equalsIgnoreCase("EQG")){
                         Country c = new Country(splitLine[0], splitLine[1], "Equatorial Guinea");
                         pointerCountry.next = c;
                         pointerCountry = c;
-                        totalCountries++;
+                        c.Number = totalCountries;
                     }else if(splitLine[1].equalsIgnoreCase("CDI")){
                         Country c = new Country(splitLine[0], splitLine[1], "Cote d'Ivoire");
                         pointerCountry.next = c;
                         pointerCountry = c;
-                        totalCountries++; 
+                        c.Number = totalCountries; 
                     }else if(splitLine[1].equalsIgnoreCase("GAM")){
                         Country c = new Country(splitLine[0], splitLine[1], "Gambia, The");
                         pointerCountry.next = c;
                         pointerCountry = c;
-                        totalCountries++;
+                        c.Number = totalCountries;
                     }else if(splitLine[1].equalsIgnoreCase("GUI")){
                         Country c = new Country(splitLine[0], splitLine[1], "Guinea");
                         pointerCountry.next = c;
                         pointerCountry = c;
-                        totalCountries++; 
+                        c.Number = totalCountries; 
                     }else if(splitLine[1].equalsIgnoreCase("BFO")){
                         Country c = new Country(splitLine[0], splitLine[1], "Burkina Faso");
                         pointerCountry.next = c;
                         pointerCountry = c;
-                        totalCountries++;
+                        c.Number = totalCountries;
                     }else if(splitLine[1].equalsIgnoreCase("DRC")){
                         Country c = new Country(splitLine[0], splitLine[1], "Democratic Republic of the Congo");
                         pointerCountry.next = c;
                         pointerCountry = c;
-                        totalCountries++; 
+                        c.Number = totalCountries;
                     }else if(splitLine[1].equalsIgnoreCase("ZIM")){
                         Country c = new Country(splitLine[0], splitLine[1], "Zimbabwe");
                         pointerCountry.next = c;
                         pointerCountry = c;
-                        totalCountries++;
+                        c.Number = totalCountries;
                     }else if(splitLine[1].equalsIgnoreCase("IRN")){
                         Country c = new Country(splitLine[0], splitLine[1], "Iran");
                         pointerCountry.next = c;
                         pointerCountry = c;
-                        totalCountries++;
+                        c.Number = totalCountries;
                     }else if(splitLine[1].equalsIgnoreCase("TUR")){
                         Country c = new Country(splitLine[0], splitLine[1], "Turkey");
                         pointerCountry.next = c;
                         pointerCountry = c;
-                        totalCountries++;
+                        c.Number = totalCountries;
                     }else if(splitLine[1].equalsIgnoreCase("YEM")){
                         Country c = new Country(splitLine[0], splitLine[1], "Yemen");
                         pointerCountry.next = c;
                         pointerCountry = c;
-                        totalCountries++;
+                        c.Number = totalCountries;
                     }else if(splitLine[1].equalsIgnoreCase("KYR")){
                         Country c = new Country(splitLine[0], splitLine[1], "Kyrgyzstan");
                         pointerCountry.next = c;
                         pointerCountry = c;
-                        totalCountries++;
+                        c.Number = totalCountries;
                     }else if(splitLine[1].equalsIgnoreCase("SRI")){
                         Country c = new Country(splitLine[0], splitLine[1], "Sri Lanka");
                         pointerCountry.next = c;
                         pointerCountry = c;
-                        totalCountries++;
+                        c.Number = totalCountries;
                     }else if(splitLine[1].equalsIgnoreCase("CAM")){
                         Country c = new Country(splitLine[0], splitLine[1], "Cambodia");
                         pointerCountry.next = c;
                         pointerCountry = c;
-                        totalCountries++;
+                        c.Number = totalCountries;
                     }else if(splitLine[1].equalsIgnoreCase("ETM")){
                         Country c = new Country(splitLine[0], splitLine[1], "Timor-Leste");
                         pointerCountry.next = c;
                         pointerCountry = c;
-                        totalCountries++;
+                        c.Number = totalCountries;
                     }else if(splitLine[1].equalsIgnoreCase("SUR")){
                         Country c = new Country(splitLine[0], splitLine[1], "Suriname");
                         pointerCountry.next = c;
                         pointerCountry = c;
-                        totalCountries++;
-                    }else if(splitLine[1].equalsIgnoreCase("United Arab Emirates")){
-                        Country c = new Country(splitLine[0], splitLine[1], "UAE");
+                        c.Number = totalCountries;
+                    }else if(splitLine[1].equalsIgnoreCase("UAE")){
+                        Country c = new Country(splitLine[0], splitLine[1], "United Arab Emirates");
                         pointerCountry.next = c;
                         pointerCountry = c;
-                        totalCountries++;
+                        c.Number = totalCountries;
+                    }else if(splitLine[1].equalsIgnoreCase("BHM")){
+                        Country c = new Country(splitLine[0], splitLine[1], "Bahamas, The");
+                        pointerCountry.next = c;
+                        pointerCountry = c;
+                        c.Number = totalCountries;
                     }else{
                         Country c = new Country(splitLine[0], splitLine[1], splitLine[2].trim());
                         pointerCountry.next = c;
                         pointerCountry = c;
-                        totalCountries++;
+                        c.Number = totalCountries;
                     }
+
+                    totalCountries++;
                 }
+            
             }
         }
 
-        /*print list of countries
+        print list of countries
         pointerCountry = headCountry;
         while(pointerCountry.next != null){
             System.out.println(pointerCountry.Name);
             pointerCountry = pointerCountry.next;
-        }*/
+        }
 
         return headCountry;
 
+    }*/
+
+
+    public void createCountryList(Scanner border, Scanner states){
+        ArrayList<String> allCodes = new ArrayList<String>();
+        while(states.hasNextLine()){
+            String[] split = states.nextLine().split("\t");
+            if(split[4].equals("2020-12-31")){
+                allCodes.add(split[0]);
+            }
+        }
+        /*while(border.hasNextLine()){
+            System.out.println(border.nextLine());
+        }*/
     }
 
-    //FIND ALL NEIGHBORS AND DISTANCES//
+
+
+
+  /*  //FIND ALL NEIGHBORS AND DISTANCES//
     public void findNeighborsList(File borders, File distances, Country headCountry){
         Country pointerCountry = headCountry;
 
@@ -359,8 +404,7 @@ public class IRoadTrip {
     public HashMap setNeighborsList(String[] neighbors, File distances, Country headCountry){
         HashMap<Country, Integer> listOfNeighbors = new HashMap<Country, Integer>();
         Country country = findCountry(neighbors[0]);
-        boolean foundLetters = true;
-        boolean foundNumbers = false;
+
 
         //Set individual hashmaps
         if(neighbors.length >= 2){
@@ -398,8 +442,30 @@ public class IRoadTrip {
 
             }            
         }
+
+        linkedListofNeighbors(listOfNeighbors, country);
         return listOfNeighbors;
+
     }
+
+    //CREATE LINKED LIST OF NEIGHBORS
+    public void linkedListofNeighbors(HashMap<Country, Integer> mapOfNeighbors, Country mainCountry){
+        Country pointerCountry = new Country(); 
+        for(Country i: mapOfNeighbors.keySet()){
+            if(i == null){
+            }else if(mainCountry.headNeighbor == null){
+                mainCountry.headNeighbor = i;
+                pointerCountry = i;
+            }else{
+                pointerCountry.nextNeighbor = i;
+                pointerCountry = pointerCountry.nextNeighbor;
+            }
+        }
+        arrayGraph[mainCountry.Number] = mainCountry.headNeighbor;
+        
+    }
+
+
 
     //GET DISTANCE BETWEEN TWO COUNTRIES//
     public int getDistance (String country1, String country2) {
@@ -442,9 +508,10 @@ public class IRoadTrip {
         for(Country i: mapOfCountries.keySet()){
             for(Country j : mapOfCountries.get(i).keySet()){
                 graph.findEdge(i,j);
-                graph.print(i,j);
+                //graph.print(i,j);
             }
         }
+        //graph.printArrayGraph();
     }
 
 
@@ -496,7 +563,7 @@ public class IRoadTrip {
         /*begin finding shortest path between countries
         if(valid1 == true && valid2 == true){
             getDistance(firstCountry, secondCountry); //distance between two bordering countries
-        }*/
+        }
 
     }
 
@@ -533,13 +600,13 @@ public class IRoadTrip {
         }
         return valid;
 
-    }
+    }*/
     
 
 
     public static void main(String[] args) {
         IRoadTrip a3 = new IRoadTrip(args);
-        a3.createGraph();
+        //a3.createGraph();
     
         //a3.acceptUserInput();
     }
