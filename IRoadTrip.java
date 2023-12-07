@@ -32,6 +32,32 @@ class Country{
 }
 
 public class IRoadTrip {
+    public class Graph{
+        int totalCountries;
+
+        //ADD/FIND EDGE//
+        int findEdge(Country firstCountry, Country secondCountry){
+            Edge e = new Edge(firstCountry, secondCountry);
+            return e.weight;
+        }
+
+        //PRINT EDGE//
+        void print(Country firstCountry, Country secondCountry){
+            System.out.println("Country 1: "+ firstCountry.Name + " Country 2: "+ secondCountry.Name + " Weight :" + findEdge(firstCountry, secondCountry));
+        }
+    }
+
+    public class Edge{
+        //Edge Variables
+        int weight = 0;
+
+        //EDGE CONSTRUCTOR//
+        Edge(Country firstCountry, Country secondCountry){
+            weight = getDistance(firstCountry, secondCountry);
+        }
+    }
+
+
     Country headCountry;
     HashMap<Country, HashMap<Country, Integer>> mapOfCountries = new HashMap<Country, HashMap<Country, Integer>>();
 
@@ -390,26 +416,35 @@ public class IRoadTrip {
         return -1;
     }
 
-    //FIND RIGHTCHILD IN MIN HEAP//
-    public int rightChild(int parentIndex){
-        return(parentIndex*2+1);
+    public int getDistance (Country firstCountry, Country secondCountry) {
+        HashMap<Country, Integer> pointerHashMap; 
+        if(firstCountry.Name == null){
+            return -1;
+        }else if(secondCountry.Name == null){
+            return -1;
+        }else{
+            for(Country i: mapOfCountries.get(firstCountry).keySet()){
+               if(i.equals(secondCountry)){
+                return(mapOfCountries.get(firstCountry).get(secondCountry));
+               }
+            }
+        }
+        return -1;
     }
 
-    //FIND LEFTCHILD IN MIN HEAP//
-    public int leftChild(int parentIndex){
-        return(parentIndex*2);
-    }
-    
-    //FIND PARENT IN MIN HEAP//
-    public int parent(int childIndex){
-        return(childIndex/2);
+    //CREATE GRAPH OF ALL COUNTRIES//
+    public void createGraph(){
+        Graph graph = new Graph();
+        for(Country i: mapOfCountries.keySet()){
+            System.out.println("-------"+i.Name+"-------");
+            for(Country j : mapOfCountries.get(i).keySet()){
+                graph.findEdge(i,j);
+                graph.print(i,j);
+            }
+        }
     }
 
 
-    //HEAPIFY UP METHOD//
-    public void heapify(Country[] unvisited){
-
-    }
 
 
 
@@ -498,8 +533,9 @@ public class IRoadTrip {
 
     public static void main(String[] args) {
         IRoadTrip a3 = new IRoadTrip(args);
+        a3.createGraph();
     
-        a3.acceptUserInput();
+        //a3.acceptUserInput();
     }
 
 }
