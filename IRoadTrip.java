@@ -106,6 +106,11 @@ public class IRoadTrip {
     }
 
     //CREATE LIST OF COUNTRIES//
+    /***createCountryList() iterates through state_name.tsv and creates countries based on proper end date and is responsible for proper naming.
+     * At the same time, createCountryList() creates a linked list of all countries
+     * createCountryList() returns the head of the linked list of all countries
+     */
+
     public Country createCountryList (Scanner states){
         headCountry = new Country();
         Country pointerCountry  = new Country();
@@ -317,6 +322,10 @@ public class IRoadTrip {
 
 
    //FIND ALL NEIGHBORS AND DISTANCES//
+    /*** findNeighborsList() works through each country in the linked list of all countries and matches them to thier respecive neighbors
+     * given by borders.txt. Neibors are stored as a HashMap within the larger Hashmap created by this function titled mapOfCountries
+     */
+
     public void findNeighborsList(File borders, File distances, Country headCountry){
         Country pointerCountry = headCountry;
 
@@ -341,6 +350,8 @@ public class IRoadTrip {
     }
 
     //FIND COUNTRY IN FULL COUNTRY LINKED LIST//
+    /*** findCountry() is a helper function to easily naviagate through the linked list of all countries
+     */
     public Country findCountry(String target){
         Country pointerCountry = headCountry;
         String targetName = target;
@@ -372,6 +383,9 @@ public class IRoadTrip {
     }
 
     //CHECK IF STRING IS NUMERICAL//
+    /***isNum() is a helper function to help with parsing through files and seperating strings of text between neighbor and distances given
+     * in border.txt.
+     */
     public boolean isNum(String num){
         if(num == null){
             return false;
@@ -385,6 +399,10 @@ public class IRoadTrip {
     }
 
     //CREATE INDIVIDUAL HASHMAPS OF NEIGHBORS FOR EACH COUNTRY//
+    /***setNeighborList() creates the individual hashmaps of neighbors for the larger hashmap of all countries.
+     * this functions works at the individual level to parse through the associated line in borders.txt for a particular country
+     */
+
     public HashMap setNeighborsList(String[] neighbors, File distances, Country headCountry){
         HashMap<Country, Integer> listOfNeighbors = new HashMap<Country, Integer>();
         Country country = findCountry(neighbors[0]);
@@ -433,6 +451,10 @@ public class IRoadTrip {
     }
 
     //CREATE LINKED LIST OF NEIGHBORS
+    /***LinkedListofNeighbors(), creates a linkedList of neighbors to aid in implementing a version of this program
+     * using Dijkstra's Algorithm and graphs
+     */
+
     public void linkedListofNeighbors(HashMap<Country, Integer> mapOfNeighbors, Country mainCountry){
         Country pointerCountry = new Country(); 
         for(Country i: mapOfNeighbors.keySet()){
@@ -445,13 +467,16 @@ public class IRoadTrip {
                 pointerCountry = pointerCountry.nextNeighbor;
             }
         }
-        arrayGraph[mainCountry.Number] = mainCountry.headNeighbor;
-        
+        arrayGraph[mainCountry.Number] = mainCountry.headNeighbor;      
     }
 
 
 
     //GET DISTANCE BETWEEN TWO COUNTRIES//
+    /*** getDistance() version 1 takes in two strings and converts each into their respective countries. This function then searches through neighbors
+     * to return the distance between the two countries so long as they share a border. If the two countries do not share a border, -1 is returned
+     */
+
     public int getDistance (String country1, String country2) {
         Country firstCountry = findCountry(country1);
         Country secondCountry = findCountry(country2);
@@ -470,6 +495,9 @@ public class IRoadTrip {
         return -1;
     }
 
+    /*** getDistance() version 2 takes in two countries. This function then searches through neighbors
+     * to return the distance between the two countries so long as they share a border. If the two countries do not share a border, -1 is returned
+     */
     public int getDistance (Country firstCountry, Country secondCountry) {
         HashMap<Country, Integer> pointerHashMap; 
         if(firstCountry.Name == null){
@@ -487,6 +515,9 @@ public class IRoadTrip {
     }
 
     //CREATE GRAPH OF ALL COUNTRIES//
+    /*** createGraph() parses through all countries in the larger hashmap as well as the smaller hashmap of neighbors to create a graph.
+     * This function created edges in between neighbors to help assist in a version of this program that implements Dijkstra's Algorithm.
+     */
     public void createGraph(){
         Graph graph = new Graph();
         for(Country i: mapOfCountries.keySet()){
@@ -498,12 +529,11 @@ public class IRoadTrip {
         //graph.printArrayGraph();
     }
 
-
-
-
-
-
     //FIND SHORTEST PATH BETWEEN TWO COUNTRIES //
+    /*** findPath() takes in two strings and finds their respective countries. This function loops through neighbors and moves towards the cloests
+     * neighbor to find a description of the path to get from country 1 to country 2.
+     */
+
     public List<String> findPath (String country1, String country2) {
         List<String> description = new ArrayList<String>();
         Country firstCountry = findCountry(country1);
@@ -523,6 +553,7 @@ public class IRoadTrip {
                 }else{
                     if(shortestDistance == -1){
                         closest = i;
+                        shortestDistance = mapOfCountries.get(current).get(i);
                     }else{
                         if(neighbors.get(i) < shortestDistance){
                             closest = i;
@@ -548,6 +579,10 @@ public class IRoadTrip {
 
 
     //PROMPT USER TO ENTER IN VALID COUNTRIES//
+    /*** acceptUserInput() prompts the user to enter in valid country names and will continuously ask until 2 country names are properly given;
+     * This function will also allow user to inpuy exit to quit the program
+     * If all both country names are validated, this function will call findPath()
+     */
     public void acceptUserInput() {
         Scanner scan = new Scanner(System.in);
         boolean valid1 = false;
@@ -587,6 +622,9 @@ public class IRoadTrip {
     }
 
     //CONFIRM IF GIVEN COUNTRY IS WITHIN COUNTRY LIST//
+    /*** validateInput() is a helper function to assist acceptUserInput() in ensuring the suggest country names have an associated country.
+     * This function utilizes a boolean to help control moving forward with the suggested country names by the user
+     */
     public boolean validateInput(Country headCountry, String targetCountry){
         Country pointerCountry = headCountry;
         String targetName = targetCountry;
